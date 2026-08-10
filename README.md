@@ -1,13 +1,24 @@
 # java-lab
 
-Runnable, educational examples about **Java Threads, Concurrency, Thread Pools,
-Performance, Virtual Threads and common production mistakes**.
+Personal collection of **Java lab exercises** - small, independent, runnable
+programs that demonstrate exactly one concept, including the mistakes, so you
+can see them fail and understand why.
 
-This repository accompanies a technical blog series on Java concurrency. Every
-example is a small, independent, runnable program that demonstrates exactly one
-concept - including the mistakes, so you can see them fail and understand why.
+No frameworks. No Spring. Pure JDK APIs. Each lab lives on its own
+`lab/<topic>` branch and is merged into `main` when complete.
 
-No frameworks. No Spring. Pure JDK concurrency APIs (Java 21+).
+## Labs
+
+| Lab | Branch | Status |
+| --- | ------ | ------ |
+| Threads & Concurrency | `lab/thread` [1] | 31 runnable examples (Java 21+) |
+
+[1] Covers **Thread Basics, Synchronization, Thread Pools, Performance, Virtual
+Threads and common production mistakes** - based on a technical blog series on
+Java concurrency. See the sections below for details.
+
+> More Java topics (collections, streams, JVM internals, ...) are planned and
+> will appear as new `lab/<topic>` branches.
 
 ## Project Overview
 
