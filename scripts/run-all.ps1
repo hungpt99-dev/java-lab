@@ -52,14 +52,32 @@ $classes = @(
     'com.example.javalab.virtualthread.VirtualThreadResourceLimitExample',
     'com.example.javalab.practical.SemaphoreConcurrencyLimitExample',
     'com.example.javalab.practical.ProducerConsumerExample',
-    'com.example.javalab.practical.GracefulShutdownExample'
+    'com.example.javalab.practical.GracefulShutdownExample',
+    'com.example.javalab.jvminternals.BytecodeExample',
+    'com.example.javalab.jvminternals.ClassLoaderHierarchyExample',
+    'com.example.javalab.jvminternals.WarmUpExample',
+    'com.example.javalab.jvminternals.StackOverflowExample',
+    'com.example.javalab.jvminternals.ObjectReferenceExample',
+    'com.example.javalab.jvminternals.FieldInitializationExample',
+    'com.example.javalab.jvminternals.ReachabilityExample',
+    'com.example.javalab.jvminternals.CircularReferenceExample',
+    'com.example.javalab.jvminternals.GenerationalGcExample',
+    'com.example.javalab.jvminternals.MemoryLeakExample',
+    'com.example.javalab.jvminternals.OutOfMemoryAreasExample heap',
+    'com.example.javalab.jvminternals.EscapeAnalysisExample',
+    'com.example.javalab.jvminternals.IntegerCacheExample',
+    'com.example.javalab.jvminternals.UnboxingNpeExample',
+    'com.example.javalab.jvminternals.StringPoolExample',
+    'com.example.javalab.jvminternals.FinallyReturnExample'
 )
 
 $failed = 0
 foreach ($cls in $classes) {
     Write-Host ''
     Write-Host ('===== ' + $cls + ' =====') -ForegroundColor Cyan
-    & $java -cp $classpath $cls
+    # Entries may carry a mode argument ("Class heap"); split on spaces.
+    $javaArgs = @($cls -split ' ')
+    & $java -cp $classpath @javaArgs
     if ($LASTEXITCODE -ne 0) {
         Write-Host ('FAILED: ' + $cls + ' (exit ' + $LASTEXITCODE + ')') -ForegroundColor Red
         $failed++

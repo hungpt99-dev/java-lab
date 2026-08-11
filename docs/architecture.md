@@ -3,9 +3,9 @@
 ## 1. Purpose
 
 `java-lab` is a companion repository for a technical blog series about Java
-Threads, Concurrency, Thread Pools, Performance, Virtual Threads and common
-production mistakes. It is a **library of runnable experiments**, not an
-application.
+Threads, Concurrency, Thread Pools, Performance, Virtual Threads, common
+production mistakes - and JVM internals. It is a **library of runnable
+experiments**, not an application.
 
 ## 2. Design Principles
 
@@ -44,6 +44,7 @@ application.
 | `performance` | Thread performance | cores bound CPU; concurrency helps I/O |
 | `virtualthread` | Virtual Threads | cheap blocking; CPU no faster; limits remain |
 | `practical` | Production patterns | semaphores, producer/consumer, shutdown |
+| `jvminternals` | How Java works internally | bytecode, class loading, references, GC reachability, escape analysis, boxed traps |
 
 ## 4. Conventions
 
@@ -87,7 +88,29 @@ java -cp target/classes com.example.javalab.performance.TooManyThreadsExample 40
   throughput is bounded by the semaphore (the "database"), not by the thread
   type.
 
-## 8. Validation
+## 8. JVM Internals Notes
+
+- **Accuracy first.** The `jvminternals` package must never present a HotSpot
+  implementation detail as a language guarantee. The javadoc and README
+  explicitly tag claims: "language guarantee" (field defaults, init order),
+  "JVM spec" (reference semantics), "common HotSpot behavior" (TLABs, `-Xss`
+  default, escape analysis, GC pause counts).
+- **Bounded danger.** GC-churn experiments (`ReachabilityExample`,
+  `CircularReferenceExample`, `MemoryLeakExample`, `GenerationalGcExample`)
+  cap allocation at 2-4 GB worst case and typically finish in tens of MB.
+  `OutOfMemoryAreasExample` catches its own OOMEs, keeps a heap reserve so
+  the catch handler can print, and caps at a 2 GB budget; the documented
+  `-Xmx32m` / `-XX:MaxDirectMemorySize=8m` runs are the "textbook" versions.
+- **Flag-driven experiments.** Several experiments are meant to be run twice
+  (default vs `-Xss256k`, default vs `-XX:-DoEscapeAnalysis`) or with logs
+  (`-Xlog:gc`, `-Xlog:class+load`, `-Xlog:compilation`, `-Xlog:stringtable`).
+  The README section "JVM Internals experiments" is the single source of
+  truth for the exact commands.
+- **`javap` is part of the lab.** `BytecodeExample` and
+  `FinallyReturnExample` are designed to be read as bytecode; their javadoc
+  tells the reader exactly which instructions to look for.
+
+## 9. Validation
 
 Before release: `mvn clean compile` must pass with Java 21; every example must
 start, print its observation, and exit on its own (checked with
